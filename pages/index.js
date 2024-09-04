@@ -1,12 +1,11 @@
-import Image from "next/image";
 import { Inter } from "next/font/google";
 import { useSelector, useDispatch } from "react-redux";
 import { getTodoData, fetchTodos } from "@/store/todoSlice";
 import { useEffect } from "react";
 import TodoList from "@/Component/TodoList";
 import TodoForm from "@/Component/TodoForm";
-// Import the wrapper from your store configuration
-import { wrapper } from "@/store/store";  // Adjust the path as necessary
+
+import { wrapper } from "@/store/store";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,11 +36,11 @@ const Home = () => {
 }
 
 // Import wrapper from your store configuration
-export const getServerSideProps = wrapper.getServerSideProps((store) => async () => {
+export const getServerSideProps =  wrapper.getServerSideProps((store) => async () => {
   await store.dispatch(fetchTodos());
   return {
     props: {}
-  }
+  };
 });
 
 export default Home;

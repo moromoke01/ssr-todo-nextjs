@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createTodo, fetchTodos } from "@/store/todoSlice";
-import { Input } from "postcss";
+
 
 export default function TodoForm(){
     const [formData, setFormData] = useState({title: '', description: ''});
@@ -9,7 +9,7 @@ export default function TodoForm(){
 
 
     const handleInputChange = (e) =>{
-        const { title, description } = e.target;
+        const { name , value } = e.target;
         setFormData({...formData, [name]:value});
     };
 
@@ -28,16 +28,26 @@ export default function TodoForm(){
 
 
     return (
-        <form onSubmit={handleSubmit}>
-            <Input type="text" name="title" 
-            onChange={handleInputChange}
-            value={formData.title} placeholder="todo title"/>
-            
-            <Input type="text" name="description" 
-            onChange={handleInputChange}
-            value={formData.description} placeholder="todo description"/>
-
-            <button type="submit">create Todo</button>
-        </form>
+        <form onSubmit={handleSubmit} className="p-4">
+      <input
+        type="text"
+        name="title"
+        value={formData.title}
+        onChange={handleInputChange}
+        className="w-full p-2 rounded-lg border"
+        placeholder="Enter todo title"
+        required
+      />
+      <textarea
+        name="description"
+        value={formData.description}
+        onChange={handleInputChange}
+        className="w-full p-2 mt-2 rounded-lg border"
+        placeholder="Enter todo description"
+      />
+      <button type="submit" className="mt-2 py-2 px-5 bg-blue-500 text-white rounded-xl">
+        {formData.id ? 'Update' : 'Add'}
+      </button>
+    </form>
     )
 }

@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { useDispatch } from "react-redux";
+import { FaEdit } from "react-icons/fa";
+import { RiDeleteBin6Fill } from "react-icons/ri";
 
 export default function TodoList({todos}){
     console.log(todos);
@@ -10,18 +12,18 @@ export default function TodoList({todos}){
     }
 
     return(
-        <ul>
-            {todos?.map((todo, index)=>(
-                <>
-                <li key={index}>
-                    <Link href={`/todos/${todo.id}`}>
-                    {todo?.title}
-                    </Link>
-                </li>
-
-                <button onClick={()=> handleDelete(todo.id)}>delete</button>
-                </>
-            ))}
-        </ul>
+        <div className="flex justify-between items-center p-4 border-b">
+      <Link href={`todos/${todo.id}`}>
+        <h3 className="text-lg px-5 font-semibold">{todo.title}</h3>
+      </Link>
+      <div className='pl-5'>
+        <button onClick={() => onEdit(todo)} className="mr-2 text-blue-500">
+          <FaEdit className="text-blue-600"/>
+        </button>
+        <button onClick={() => onDelete(todo.id)} className="text-red-500">
+          <RiDeleteBin6Fill className="text-red-600"/>
+        </button>
+      </div>
+    </div>
     )
 }

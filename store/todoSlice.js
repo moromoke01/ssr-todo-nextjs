@@ -2,7 +2,7 @@ import {createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "./axiosInstance";
 
 export const fetchTodos = createAsyncThunk('todos/fetchTodos', async() => {
-    const res = await axiosInstance.get('/users');
+    const res = await axiosInstance.get('/todos');
     return res.data;
 })
 
