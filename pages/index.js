@@ -5,20 +5,20 @@ import { getTodoData, fetchTodos } from "@/store/todoSlice";
 import { useEffect } from "react";
 import TodoList from "@/Component/TodoList";
 import TodoForm from "@/Component/TodoForm";
+// Import the wrapper from your store configuration
+import { wrapper } from "@/store/store";  // Adjust the path as necessary
+
 const inter = Inter({ subsets: ["latin"] });
 
-
-const Home = ()=> {
-
+const Home = () => {
   const dispatch = useDispatch();
-  const {todos, status, error} = useSelector(getTodoData);
+  const { todos, status, error } = useSelector(getTodoData);
 
-  useEffect(()=> {
-    if (status === 'idle'){
+  useEffect(() => {
+    if (status === 'idle') {
       dispatch(fetchTodos());
     }
-}, [status, dispatch]);
-
+  }, [status, dispatch]);
 
   return (
     <div>
@@ -27,7 +27,7 @@ const Home = ()=> {
       {status === 'loading' && <p>Loading...</p>}
       {status === 'failed' && <p>Error: {error}</p>}
       {status === 'succeeded' && todos.length > 0 &&
-      <TodoList todos ={todos} />
+        <TodoList todos={todos} />
       }
 
       <h1>Create Todos</h1>
@@ -36,11 +36,12 @@ const Home = ()=> {
   );
 }
 
-export const getServerSideProps = wrapper.getServerSideProps((store) => async() =>{
+// Import wrapper from your store configuration
+export const getServerSideProps = wrapper.getServerSideProps((store) => async () => {
   await store.dispatch(fetchTodos());
-  return{
+  return {
     props: {}
   }
 });
- 
-export default Home
+
+export default Home;

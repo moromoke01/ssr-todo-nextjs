@@ -11,7 +11,7 @@ export const createTodo = createAsyncThunk('todos/createTodo', async(todo)=>{
     return res.data;
 })
 
-export const deleteUser = createAsyncThunk('todos/deleteTodo', async({id, todo})=>{
+export const deleteTodo = createAsyncThunk('todos/deleteTodo', async({id, todo})=>{
     await axiosInstance.delete(`/todos/${id}`);
     return id;
 })
