@@ -6,10 +6,12 @@ export default async function handler(req, res) {
         method,
     } = req; 
 
+    console.log("Received ID:", id);
+
     try {
         switch (method) {
             case 'GET': {
-                const todo = await getTodoById(id); 
+                const todo = getTodoById(id); 
                 if (!todo) {
                     res.status(404).json({ error: 'Todo not found' });
                     return;
@@ -18,17 +20,17 @@ export default async function handler(req, res) {
                 break;
             }
             case 'DELETE': {
-                const deletedTodo = await deleteTodoById(id); 
+                const deletedTodo = deleteTodoById(id); 
                 if (!deletedTodo) {
                     res.status(404).json({ error: 'Todo not found' });
                     return;
                 }
-                res.status(204).end();
+                res.status(204).end(); // No content
                 break;
             }
             case 'PUT': { 
                 const data = req.body;
-                const updatedTodo = await updateTodoById(id, data); 
+                const updatedTodo = updateTodoById(id, data); 
                 if (!updatedTodo) {
                     res.status(404).json({ error: 'Todo not found or not updated' });
                     return;

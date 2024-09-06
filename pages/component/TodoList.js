@@ -7,7 +7,7 @@ export default function TodoList({ todo, onEdit, onDelete }) {
    
     return (
                 <div className="flex justify-between items-center p-4 border-b">
-                    <Link href={`/todos/${todo.id}`}>
+                    <Link href={`todos/${todo.id}`}>
                         <h3 className="text-lg px-5 font-semibold">{todo.title}</h3>
                     </Link>
                     <div className="pl-5">
