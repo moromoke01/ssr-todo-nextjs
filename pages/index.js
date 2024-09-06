@@ -53,7 +53,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen m-auto flex flex-col items-center justify-center bg-gray-200">
-      <div className="w-full p-5 m-4 bg-purple-800 rounded-lg shadow-md sm:w-3/4 md:w-2/3 lg:w-3/6">
+      <div className="w-full p-5 m-4 bg-blue-900 rounded-lg shadow-md sm:w-3/4 md:w-2/3 lg:w-3/6">
         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-center text-white">My Todo List</h1>
 
       <TodoForm 
