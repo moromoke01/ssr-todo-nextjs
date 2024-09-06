@@ -1,11 +1,20 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { createTodo, fetchTodos } from "@/store/todoSlice";
+import { useState, useEffect } from "react";
 
+export default function TodoForm({initialData = {}, onSave}){
+    const [formData, setFormData] = useState({
+      id: initialData.id || '',
+      title: initialData.title || '',
+      description: initialData.description || ''
+    });
+   
 
-export default function TodoForm(){
-    const [formData, setFormData] = useState({title: '', description: ''});
-    const dispatch = useDispatch();
+    useEffect(() => {
+      setFormData({
+        id: initialData.id ,
+        title: initialData.title || '',
+        description: initialData.description || ''
+      });
+    }, [initialData]);
 
 
     const handleInputChange = (e) =>{
@@ -15,16 +24,9 @@ export default function TodoForm(){
 
     const handleSubmit = async(e) =>{
         e.preventDefault();
-        try{
-            const res = await dispatch (createTodo(formData))
-            alert("Todo created successfully");
-            setFormData({title: '', description: ''});
-            dispatch(fetchTodos());
-        }catch(error){
-            console.log('Error creating todo:', error);
-            alert('failed to create todo')
-        }
-    }
+        onSave(formData);
+        setFormData({title: '', description: ''});
+    };
 
 
     return (

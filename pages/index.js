@@ -1,10 +1,9 @@
 import { Inter } from "next/font/google";
 import { useSelector, useDispatch } from "react-redux";
-import { getTodoData, fetchTodos } from "@/store/todoSlice";
-import { useEffect } from "react";
-import TodoList from "@/Component/TodoList";
-import TodoForm from "@/Component/TodoForm";
-
+import { getTodoData, fetchTodos,updateTodo, createTodo, deleteTodo } from "@/store/todoSlice";
+import { useState, useEffect } from "react";
+import TodoList from "@/pages/component/TodoList";
+import TodoForm from "@/pages/component/TodoForm";
 import { wrapper } from "@/store/store";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -13,24 +12,75 @@ const Home = () => {
   const dispatch = useDispatch();
   const { todos, status, error } = useSelector(getTodoData);
 
+  const [currentTodo, setCurrentTodo] = useState(null);
+
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchTodos());
     }
   }, [status, dispatch]);
 
+
+  const handleSave = (todo) => {
+    if (todo.id) {
+      console.log("Saving Todo:", todo);
+      dispatch(updateTodo({
+        id: todo.id,
+        updatedTodo: {
+          title: todo.title,
+          description: todo.description
+        }
+      }));
+    } else {
+      dispatch(createTodo({
+
+        title: todo.title,
+        description: todo.description
+      }));
+      alert("Todo created successfully")
+      console.log("Saving Todo:", todo);
+    }
+
+    dispatch(fetchTodos());
+    setCurrentTodo(null);
+  };
+
+
+  const handleDelete = (id) =>{
+   dispatch(deleteTodo(id));
+  };
+
+
   return (
-    <div>
-      <h1>Todos</h1>
+    <div className="min-h-screen m-auto flex flex-col items-center justify-center bg-gray-200">
+      <div className="w-full p-5 m-4 bg-purple-800 rounded-lg shadow-md sm:w-3/4 md:w-2/3 lg:w-3/6">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-center text-white">My Todo List</h1>
+
+      <TodoForm 
+       initialData ={currentTodo || {}}
+       onSave={handleSave}
+      />
 
       {status === 'loading' && <p>Loading...</p>}
       {status === 'failed' && <p>Error: {error}</p>}
       {status === 'succeeded' && todos.length > 0 &&
-        <TodoList todos={todos} />
+
+   
+      <div className="mt-4 bg-white rounded-lg p-4">
+         {todos.map((todo)=>(
+            <TodoList 
+                key={todo.id}
+                todo={todo} 
+                onEdit={setCurrentTodo}
+                onDelete={handleDelete}
+                />
+    ))}
+       
+      </div>
       }
 
-      <h1>Create Todos</h1>
-      <TodoForm />
+      
+    </div>
     </div>
   );
 }

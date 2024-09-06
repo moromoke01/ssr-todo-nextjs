@@ -4,7 +4,7 @@ export default async function handler(req, res) {
     try {
         switch (req.method) {
             case 'GET': {
-                const todos = await  getTodos(); // Await if getTodos is async
+                const todos = await  getTodos(); 
                 res.status(200).json(todos);
                 break;
             }
@@ -15,10 +15,11 @@ export default async function handler(req, res) {
                     return;
                 }
 
-                const newTodo = await addTodo({ title, description }); // Await if addTodo is async
+                const newTodo = await addTodo({ title, description }); 
                 res.status(201).json(newTodo);
                 break;
             }
+           
             default: {
                 res.setHeader("Allow", ['GET', 'POST']);
                 res.status(405).end(`Method ${req.method} not allowed`);

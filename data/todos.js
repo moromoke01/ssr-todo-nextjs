@@ -30,3 +30,18 @@ export const deleteTodoById = (id) => {
     }
     return null;
 };
+
+
+// export const deleteTodoById = ({param}) => {
+//     const {id}  = params;
+
+//     const index = todos.findIndex((todo) => todo.id === id);
+
+//     if (index === -1) {
+
+//         return new Response('Todo not found', { status: 404 });
+//     }
+//     todos.splice(index, 1);
+
+//     return new Response('Todo deleted successfully', { status: 200 });
+//   }

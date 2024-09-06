@@ -6,15 +6,37 @@ export const fetchTodos = createAsyncThunk('todos/fetchTodos', async() => {
     return res.data;
 })
 
+export const fetchTodo = createAsyncThunk('todos/fetchTodo', async(id) => {
+    const res = await axiosInstance.get(`/todos/${id}`);
+    return res.data;
+})
+
 export const createTodo = createAsyncThunk('todos/createTodo', async(todo)=>{
     const res = await axiosInstance.post('/todos', todo);
     return res.data;
 })
 
-export const deleteTodo = createAsyncThunk('todos/deleteTodo', async({id, todo})=>{
+export const updateTodo = createAsyncThunk('todos/updateTodo', async({id, updatedTodo})=>{
+   const res = await axiosInstance.put(`/todos/${id}`, updatedTodo);
+   return res.data;
+})
+
+export const deleteTodo = createAsyncThunk('todos/deleteTodo', async(id)=>{
     await axiosInstance.delete(`/todos/${id}`);
     return id;
 })
+
+
+// export const deleteTodo = createAsyncThunk('todo/deleteTodo', async(id)=> {
+//     const response = await fetch(`/todos/${id}`, {
+//         method: 'DELETE',
+//     });
+
+//     if(!response.ok){
+//         throw new Error('failed to delete the todo');
+//     }
+//     return id;
+// });
 
 
 
@@ -23,6 +45,7 @@ export const deleteTodo = createAsyncThunk('todos/deleteTodo', async({id, todo})
 const todosSlice = createSlice({
     name: 'todo',
     initialState:{
+        todo:null,
         todos: [],
         status: 'idle',
         error: null,
@@ -42,6 +65,20 @@ const todosSlice = createSlice({
             state.error = action.error.message;
         })
 
+        //extraReducer for single todo
+        .addCase(fetchTodo.pending, (state)=> {
+            state.status = 'loading';
+        })
+        .addCase(fetchTodo.fulfilled, (state, action)=>{
+            state.status = 'succeeded';
+            state.todos = action.payload;
+        })
+        .addCase(fetchTodo.rejected, (state, action)=>{
+            state.status = 'failed';
+            state.error = action.error.message;
+        })
+
+        //extraReducer to creating todo
         .addCase(createTodo.pending, (state)=>{
             state.status = 'loading'
         })
@@ -54,18 +91,37 @@ const todosSlice = createSlice({
             state.error = action.error.message;
         })
 
-        //delete extraReducer
-        .addCase(deleteTodo.pending, (state)=>{
-            state.status = 'loading'
-        })
-        .addCase(deleteTodo.fulfilled, (state, action)=>{
+        //extraReducer for updating
+        .addCase(updateTodo.pending, (state) => {
+            state.status = 'loading';
+          })
+        .addCase(updateTodo.fulfilled, (state, action) => {
             state.status = 'succeeded';
-            state.todos = state.todos.filter(todo=> todo.id !== action.payload)
-        })
-        .addCase(deleteTodo.rejected, (state, action)=>{
+            const updatedTodo = action.payload;
+            const index = state.todos.findIndex(todo => todo.id === updatedTodo.id);
+            if (index !== -1) {
+              state.todos[index] = updatedTodo;
+            }
+          })
+          .addCase(updateTodo.rejected, (state, action) => {
             state.status = 'failed';
             state.error = action.error.message;
+          })
+
+
+        //delete extraReducer
+        // .addCase(deleteTodo.fulfilled, (state, action)=>{
+        //     state.status = 'succeeded';
+        //     state.todos = state.todos.filter(todo=> todo.id !== action.payload)
+        // })
+        .addCase(deleteTodo.fulfilled, (state, action) => {
+            const id = action.payload;
+            const index = state.todos.findIndex(todo => todo.id === id);
+            if(index !== -1){
+                state.todos.splice(index, 1);
+            }
         })
+        
     }
 });
 
