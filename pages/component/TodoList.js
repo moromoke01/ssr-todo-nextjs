@@ -20,7 +20,7 @@ export default function TodoList({ todo, onEdit, onDelete }) {
                             <RiDeleteBin6Fill className="text-red-600" />
                         </button>
 
-                 <Link href={`/todos/${todo.id}`}>
+                 <Link href={`/todos/${todo?.id}`}>
                     <button
                       className="p-2 ">
                      <IoEyeSharp />
