@@ -11,14 +11,16 @@ const inter = Inter({ subsets: ["latin"] });
 const Home = () => {
   const dispatch = useDispatch();
   const { todos, status, error } = useSelector(getTodoData);
-
   const [currentTodo, setCurrentTodo] = useState(null);
+
 
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchTodos());
     }
   }, [status, dispatch]);
+  
+
 
   const handleSave = async (todo) => {
     if (todo.id) {
@@ -47,9 +49,13 @@ const Home = () => {
     setCurrentTodo(null);
   };
 
+
+
   const handleDelete = (id) => {
     dispatch(deleteTodo(id));
+    alert("Todo deleted");
   };
+
 
   return (
     <div className="min-h-screen m-auto flex flex-col items-center justify-center bg-gray-200">
@@ -79,6 +85,8 @@ const Home = () => {
     </div>
   );
 };
+
+
 
 // Import wrapper from your store configuration
 export const getServerSideProps = wrapper.getServerSideProps((store) => async () => {

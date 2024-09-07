@@ -44,8 +44,8 @@ export const deleteTodo = createAsyncThunk('todos/deleteTodo', async(id)=>{
 
 const todosSlice = createSlice({
     name: 'todo',
-    initialState:{
-        todo:null,
+    initialState: {
+        todo: null,
         todos: [],
         status: 'idle',
         error: null,
@@ -53,74 +53,76 @@ const todosSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-        .addCase(fetchTodos.pending, (state)=> {
-            state.status = 'loading';
-        })
-        .addCase(fetchTodos.fulfilled, (state, action)=>{
-            state.status = 'succeeded';
-            state.todos = action.payload;
-        })
-        .addCase(fetchTodos.rejected, (state, action)=>{
-            state.status = 'failed';
-            state.error = action.error.message;
-        })
+            .addCase(fetchTodos.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchTodos.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.todos = action.payload;
+            })
+            .addCase(fetchTodos.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
 
-        //extraReducer for single todo
-        .addCase(fetchTodo.pending, (state)=> {
-            state.status = 'loading';
-        })
-        .addCase(fetchTodo.fulfilled, (state, action)=>{
-            state.status = 'succeeded';
-            state.todos = action.payload;
-        })
-        .addCase(fetchTodo.rejected, (state, action)=>{
-            state.status = 'failed';
-            state.error = action.error.message;
-        })
+            // Handle a single todo separately
+            .addCase(fetchTodo.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchTodo.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.todo = action.payload;  // Use a separate field for a single todo
+            })
+            .addCase(fetchTodo.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
 
-        //extraReducer to creating todo
-        .addCase(createTodo.pending, (state)=>{
-            state.status = 'loading'
-        })
-        .addCase(createTodo.fulfilled, (state, action)=>{
-            state.status = 'succeeded';
-            state.todos.push(action.payload);
-        })
-        .addCase(createTodo.rejected, (state, action)=>{
-            state.status = 'failed';
-            state.error = action.error.message;
-        })
+            // Create todo
+            .addCase(createTodo.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(createTodo.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.todos.push(action.payload);
+            })
+            .addCase(createTodo.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
 
-        //extraReducer for updating
-        .addCase(updateTodo.pending, (state) => {
-            state.status = 'loading';
-          })
-        .addCase(updateTodo.fulfilled, (state, action) => {
-            state.status = 'succeeded';
-            const updatedTodo = action.payload;
-            const index = state.todos.findIndex(todo => todo.id === updatedTodo.id);
-            if (index !== -1) {
-              state.todos[index] = updatedTodo;
-            }
-          })
-          .addCase(updateTodo.rejected, (state, action) => {
-            state.status = 'failed';
-            state.error = action.error.message;
-          })
+            // Update todo
+            .addCase(updateTodo.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(updateTodo.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                const updatedTodo = action.payload;
+                const index = state.todos.findIndex(todo => todo.id === updatedTodo.id);
+                if (index !== -1) {
+                    state.todos[index] = updatedTodo;
+                }
+            })
+            .addCase(updateTodo.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
 
+            // Delete todo
+            .addCase(deleteTodo.fulfilled, (state, action) => {
+                const id = action.payload;
+                const index = state.todos.findIndex(todo => todo.id === id);
+                if (index !== -1) {
+                    state.todos.splice(index, 1);
+                }
+            });
 
         //delete extraReducer
         // .addCase(deleteTodo.fulfilled, (state, action)=>{
         //     state.status = 'succeeded';
         //     state.todos = state.todos.filter(todo=> todo.id !== action.payload)
         // })
-        .addCase(deleteTodo.fulfilled, (state, action) => {
-            const id = action.payload;
-            const index = state.todos.findIndex(todo => todo.id === id);
-            if(index !== -1){
-                state.todos.splice(index, 1);
-            }
-        })
+       
         
     }
 });
