@@ -9,7 +9,7 @@ export default function TodoList({ todo, onEdit, onDelete }) {
     return (
                 <div className="flex justify-between items-center p-4 border-b">
                   
-                        <h3 className="text-lg px-5 font-semibold">{todo.title}</h3>
+                        <h3 className="text-lg px-5 font-semibold">{todo?.title}</h3>
                 
                     <div className="pl-5">
                         <button onClick={() => onEdit(todo)} className="mr-2 text-blue-500">
